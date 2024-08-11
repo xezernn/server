@@ -9,8 +9,8 @@ const loginRouter = require('./src/routes/login');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get((req, res) => {
-    res.json({"msj":"necesen"})
+app.get("/", (req, res) => {
+  res.json({ "msj": "necesen" })
 })
 app.use('/products', productsRouter);
 app.use('/categories', categoriesRouter);
