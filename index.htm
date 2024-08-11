@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+</head>
+<body>
+    <h1>Create a New Product</h1>
+    <form id="product-form" enctype="multipart/form-data">
+
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required><br><br>
+
+        <label for="discount">Discount (%):</label>
+        <input type="number" id="discount" name="discount" step="1" min="0" max="100" required><br><br>
+
+        <label for="categoryId">Category ID:</label>
+        <input type="number" value="19" id="categoryId" name="categoryId" required><br><br>
+        
+        <label for="subcategoryId">Subcategory ID:</label>
+        <input type="number" value="46" id="subcategoryId" name="subcategoryId" required><br><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea><br><br>
+
+        <label for="img">Images:</label>
+        <input type="file" id="img" name="img" multiple required><br><br>
+
+        <button type="submit">Create Product</button>
+    </form>
+
+    <script>
+        async function fetchAllProducts() {
+            try {
+                const response = await fetch("http://localhost:3000/products/all");
+                if (!response.ok) throw new Error('Network response was not ok');
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+        fetchAllProducts();
+
+        document.getElementById('product-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjIsImlhdCI6MTcyMzA0NDI0OCwiZXhwIjozNjAwMDE3MjMwNDA2NDh9.frFBxKt_U5snQDAy9y_vzfcXjjLGTlClzIU0rPWROEw';
+
+            try {
+                const response = await fetch('http://localhost:3000/products/update/30', { 
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData);
+                    alert('Error creating product. Check console for details.');
+                    return;
+                }
+
+                const result = await response.json();
+                alert('Product created successfully!');
+                console.log('Product created:', result);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to create product.');
+            }
+        });
+    </script>
+</body>
+</html>

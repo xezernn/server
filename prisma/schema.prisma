@@ -1,0 +1,46 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["tracing"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("TELEFONCLUB_PRISMA_URL")
+  directUrl = env("TELEFONCLUB_URL_NON_POOLING")
+}
+model Product {
+  id            Int         @id @default(autoincrement())
+  img           String[]
+  name          String      @db.VarChar(255)
+  price         Float       
+  discount      Int         @default(0) 
+  categoryId    Int
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategoryId Int
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  description   String      @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  metadata      String?      @default("")
+}
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  categoryName String        @unique @db.VarChar(255)
+  Product      Product[]
+  Subcategory  Subcategory[]
+}
+
+model Subcategory {
+  id           Int       @id @default(autoincrement())
+  categoryName String    @unique @db.VarChar(255)
+  Category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId   Int
+  Product      Product[]
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  login    String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+}
