@@ -9,10 +9,12 @@ const loginRouter = require('./src/routes/login');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get((req, res) => {
+    res.json({"msj":"necesen"})
+})
 app.use('/products', productsRouter);
 app.use('/categories', categoriesRouter);
 app.use('/auth', loginRouter);
-
 const PORT = process.env.PORT || 3768;
 
 app.listen(PORT, () => {
