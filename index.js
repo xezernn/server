@@ -10,8 +10,6 @@ const loginRouter = require('./src/routes/login');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-console.log(process.env.S3_BUCKET_NAME);
-
 app.use('/products', productsRouter);
 app.use('/slider', sliderRouter);
 app.use('/categories', categoriesRouter);
