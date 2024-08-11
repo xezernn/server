@@ -8,6 +8,7 @@ datasource db {
   url       = env("TELEFONCLUB_PRISMA_URL")
   directUrl = env("TELEFONCLUB_URL_NON_POOLING")
 }
+
 model Product {
   id            Int         @id @default(autoincrement())
   img           String[]
@@ -21,14 +22,27 @@ model Product {
   description   String      @db.Text
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  metadata      String?      @default("")
+  metadata      String?     @default("")
+  isTopSelling  Boolean     @default(false) // Ürünün top-selling olup olmadığını belirler
+}
+
+model Slider {
+  id            Int         @id @default(autoincrement())
+  img           String[]
+  categoryId    Int
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategoryId Int
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Category {
-  id           Int           @id @default(autoincrement())
-  categoryName String        @unique @db.VarChar(255)
+  id           Int       @id @default(autoincrement())
+  categoryName String    @unique @db.VarChar(255)
   Product      Product[]
   Subcategory  Subcategory[]
+  Slider       Slider[] 
 }
 
 model Subcategory {
@@ -37,6 +51,7 @@ model Subcategory {
   Category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId   Int
   Product      Product[]
+  Slider       Slider[]  
 }
 
 model User {

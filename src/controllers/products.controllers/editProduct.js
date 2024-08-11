@@ -8,7 +8,7 @@ const productSchema = z.object({
   name: z.string()
     .min(3, { message: 'Product name must be at least 3 characters long' })
     .max(255, { message: 'Product name must be less than 255 characters' })
-    .trim(),
+    .trim().optional(),
   price: z.number()
     .positive({ message: 'Price must be a positive number' })
     .min(0.01, { message: 'Price must be at least 0.01' })
@@ -25,39 +25,49 @@ const productSchema = z.object({
     .positive({ message: 'Subcategory ID must be a positive integer' }).optional(),
   description: z.string()
     .min(3, { message: 'Product description must be at least 3 characters long' })
-    .max(255, { message: 'Product description must be less than 255 characters' })
+    .max(1000, { message: 'Product description must be less than 1000 characters' })
     .trim().optional(),
-  metadata: z.string().optional()
+  metadata: z.string().optional(),
+  isTopSelling: z.boolean().optional() 
 });
 
+
 const editProduct = async (req, res) => {
-
-
   const { price, discount, categoryId, subcategoryId } = req.body;
   const obj = {
     ...req.body,
     price: Number(price),
     discount: Number(discount),
     categoryId: Number(categoryId),
-    subcategoryId: +subcategoryId,
-  }
+    subcategoryId: Number(subcategoryId),
+    isTopSelling: req.body.isTopSelling === 'true'
+  };
+
   const parseResult = productSchema.safeParse(obj);
   if (!parseResult.success) {
-    return res.status(400).json({ errors: parseResult });
+    return res.status(400).json({ errors: parseResult.error.format() });
   }
 
   try {
     const id = Number(req.params.id);
     const files = req.files;
     const img = files.map(file => file.location);
-    const { name, price, discount, categoryId, subcategoryId, description, metadata } = parseResult.data;
-
+    const { name, price, discount, categoryId, subcategoryId, description, metadata, isTopSelling } = parseResult.data;
 
     const updatedProduct = await prisma.product.update({
       where: { id },
-      data: { img, name, price: Number(price), discount: Number(discount), categoryId: Number(categoryId), subcategoryId: +subcategoryId, description, metadata }
+      data: {
+        img,
+        name,
+        price,
+        discount,
+        categoryId,
+        subcategoryId,
+        description,
+        metadata,
+        isTopSelling
+      }
     });
-    console.log(updatedProduct);
 
     res.status(200).json(updatedProduct);
   } catch (error) {
