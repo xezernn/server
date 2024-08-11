@@ -14,7 +14,7 @@ const s3 = new S3Client({
 const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: process.env.S3_BUCKET_NAME, 
+        bucket: 'neptun-sekiller', // Bucket adını birbaşa burada yoxlayın
         metadata: function (req, file, cb) {
             cb(null, { fieldName: file.fieldname });
         },
