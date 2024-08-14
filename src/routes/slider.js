@@ -6,7 +6,7 @@ const { createSlider, getSliders, deleteSliderById } = require('../controllers/s
 const auth = require('../middlewares/auth.middleware');
 const upload = require('../middlewares/upload.middleware');
 
-router.post('/create', auth, upload.array('img', 5), createSlider);
+router.post('/', auth, upload.array('img', 5), createSlider);
 router.get('/', getSliders);
 router.delete('/:id', deleteSliderById);
 
