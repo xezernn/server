@@ -4,14 +4,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url       = env("TELEFONCLUB_PRISMA_URL")
   directUrl = env("TELEFONCLUB_URL_NON_POOLING")
 }
 
 model Product {
   id            Int         @id @default(autoincrement())
-  img           String[]
+  img           Json        // Şəkil URL-lərini JSON kimi saxlayır
   name          String      @db.VarChar(255)
   price         Float       
   discount      Int         @default(0) 
@@ -23,12 +23,12 @@ model Product {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   metadata      String?     @default("")
-  isTopSelling  Boolean     @default(false) // Ürünün top-selling olup olmadığını belirler
+  isTopSelling  Boolean     @default(false)
 }
 
 model Slider {
   id            Int         @id @default(autoincrement())
-  img           String[]
+  img           Json        // Şəkil URL-lərini JSON kimi saxlayır
   categoryId    Int
   category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   subcategoryId Int
