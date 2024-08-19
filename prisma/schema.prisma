@@ -11,7 +11,7 @@ datasource db {
 
 model Product {
   id            Int         @id @default(autoincrement())
-  img           Json        // Şəkil URL-lərini JSON kimi saxlayır
+   img           String[]      
   name          String      @db.VarChar(255)
   price         Float       
   discount      Int         @default(0) 
@@ -28,7 +28,7 @@ model Product {
 
 model Slider {
   id            Int         @id @default(autoincrement())
-  img           Json        // Şəkil URL-lərini JSON kimi saxlayır
+  img           String[]       
   categoryId    Int
   category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   subcategoryId Int
