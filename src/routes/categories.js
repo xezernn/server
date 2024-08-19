@@ -15,14 +15,14 @@ const validator = require('../middlewares/validation.middleware');
 const { categorySchema, subcategorySchema } = require('../schema/categories.schema');
 const router = express.Router();
 
-router.post('/create', validator(categorySchema), auth, createCategory);
-router.get('/all', getCategories);
-router.get('/get/:id', getCategoriesById);
-router.put('/update/:id', validator(categorySchema), auth, editCategoriesById);
-router.delete('/delete/:id', auth, deleteCategoryById);
+router.post('/', validator(categorySchema), auth, createCategory);
+router.get('/', getCategories);
+router.get('/:id', getCategoriesById);
+router.put('/:id', validator(categorySchema), auth, editCategoriesById);
+router.delete('/:id', auth, deleteCategoryById);
 
-router.post('/subcategory/create', auth, createSubcategory);
-router.put('/subcategory/update/:id', auth, updateSubcategory);
-router.delete('/subcategory/delete/:id', auth, deleteSubcategory);
+router.post('/subcategory', auth, createSubcategory);
+router.put('/subcategory/:id', auth, updateSubcategory);
+router.delete('/subcategory/:id', auth, deleteSubcategory);
 
 module.exports = router;
