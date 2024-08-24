@@ -7,20 +7,8 @@ const getSliders = async (req, res) => {
       select: {
         id: true,
         img: true,
-        category: {
-          select: {
-            id: true,
-            categoryName: true,
-          },
-        },
-        subcategory: {
-          select: {
-            id: true,
-            categoryName: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
+        category: true,
+        subcategory: true
       },
     });
 

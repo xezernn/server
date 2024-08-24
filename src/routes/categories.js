@@ -15,6 +15,10 @@ const validator = require('../middlewares/validation.middleware');
 const { categorySchema, subcategorySchema } = require('../schema/categories.schema');
 const router = express.Router();
 
+
+//axiosInstanse.METHOD(`/categories/DIRNAGIN_ICINDE_YAZILANLAR`)
+// METHOD = reoter.get , reouet.post ve s yeni noqteden sonrakilar
+
 router.post('/', validator(categorySchema), auth, createCategory);
 router.get('/', getCategories);
 router.get('/:id', getCategoriesById);

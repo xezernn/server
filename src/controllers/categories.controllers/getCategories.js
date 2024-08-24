@@ -13,7 +13,18 @@ const getCategories = async (req, res) => {
                 }
             }
         });
-        res.status(200).json(categories);
+
+        const formattedCategories = categories.map(category => ({
+            id: category.id,
+            categoryName: category.categoryName,
+            subcategory: category.Subcategory.map(subcat => ({
+                id: subcat.id,
+                categoryName: subcat.categoryName.toLowerCase()
+            }
+            ))
+        }))
+
+        res.status(200).json(formattedCategories);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -8,9 +8,7 @@ const s3 = new S3Client({
     }
 });
 
-
-const deleteImage = async (req, res) => {
-    const { filename } = req.params;
+const deleteImageByPathname = async (filename) => {
     const bucketName = process.env.S3_BUCKET_NAME;
     try {
         const deleteParams = {
@@ -19,12 +17,9 @@ const deleteImage = async (req, res) => {
         }
         await s3.send(new DeleteObjectCommand(deleteParams));
 
-        res.status(200).json({ message: 'Image deleted successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to delete image' });
     }
 };
 
-
-module.exports = deleteImage; 
+module.exports = deleteImageByPathname; 

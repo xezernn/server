@@ -30,29 +30,27 @@ const productSchema = z.object({
     isTopSelling: z.boolean().optional()
 });
 
-
 const createProduct = async (req, res) => {
-    const files = req.files;
-    const img = files.map(file => file.location);
+    const { img, price, discount, categoryId, subcategoryId } = req.body;
 
     const parseResult = productSchema.safeParse({
         ...req.body,
         img,
-        price: parseFloat(req.body.price),
-        discount: parseInt(req.body.discount),
-        categoryId: parseInt(req.body.categoryId),
-        subcategoryId: parseInt(req.body.subcategoryId),
-        isTopSelling: req.body.isTopSelling === 'true' // boolean olarak işlemek
+        price: parseFloat(price),
+        discount: parseInt(discount),
+        categoryId: parseInt(categoryId),
+        subcategoryId: parseInt(subcategoryId),
     });
 
     if (!parseResult.success) {
-        return res.status(400).json({ errors: parseResult.error.format() });
+        return res.status(400).json({ errors: parseResult.error.format().name._errors[0] });
     }
 
     try {
-        const { name, price, discount, categoryId, subcategoryId, description, metadata, isTopSelling } = parseResult.data;
+        const { img, name, price, discount, categoryId, subcategoryId, description, metadata,isTopSelling } = parseResult.data;
         const product = await prisma.product.create({
             data: {
+                isTopSelling,
                 img,
                 name,
                 price,
@@ -60,11 +58,10 @@ const createProduct = async (req, res) => {
                 categoryId,
                 subcategoryId,
                 description,
-                metadata,
-                isTopSelling 
+                metadata
             }
         });
-        res.status(201).json(product);
+        res.status(201).json({ status: true, ...product });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });

@@ -6,7 +6,11 @@ const { createSlider, getSliders, deleteSliderById } = require('../controllers/s
 const auth = require('../middlewares/auth.middleware');
 const upload = require('../middlewares/upload.middleware');
 
-router.post('/', auth, upload.array('img', 5), createSlider);
+
+//axiosInstanse.METHOD(`/slider/DIRNAGIN_ICINDE_YAZILANLAR`)
+// METHOD = reoter.get , reouet.post ve s yeni noqteden sonrakilar
+
+router.post('/', auth, upload.single('img'), createSlider);
 router.get('/', getSliders);
 router.delete('/:id', deleteSliderById);
 
