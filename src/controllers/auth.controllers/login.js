@@ -4,10 +4,10 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 
-const login = async (req , res) => {
-    try {        
+const login = async (req, res) => {
+    try {
         const { login, password } = req.body;
-        
+
         const existingUser = await prisma.user.findUnique({
             where: { login }
         });
@@ -21,9 +21,10 @@ const login = async (req , res) => {
             return res.status(401).json({ error: 'Invalid login credentials' });
         }
 
-        const token = jwt.sign({ userid: existingUser.id }, process.env.JWT_SECRET, { expiresIn: '99999999999h' });
+        const token = generateAccesToken({ userid: newUser.id })
+        const refresh = generateRefreshToken({ userid: newUser.id })
 
-        res.status(200).json({ token, status: true });
+        res.status(200).json({ refresh, token, status: true });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
