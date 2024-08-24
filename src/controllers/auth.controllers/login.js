@@ -20,7 +20,7 @@ const login = async (req, res) => {
         
         if (!validPassword) {
             return res.status(401).json({ error: 'Invalid login credentials' });
-        }
+        } 
 
         const token = generateAccesToken({ userid: existingUser.id })
         const refresh = generateRefreshToken({ userid: existingUser.id })
