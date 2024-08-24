@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
+const { generateAccesToken, generateRefreshToken } = require('./jwt.controller');
 const prisma = new PrismaClient();
 
 
@@ -17,12 +17,13 @@ const login = async (req, res) => {
         }
 
         const validPassword = await bcrypt.compare(password, existingUser.password);
+        
         if (!validPassword) {
             return res.status(401).json({ error: 'Invalid login credentials' });
         }
 
-        const token = generateAccesToken({ userid: newUser.id })
-        const refresh = generateRefreshToken({ userid: newUser.id })
+        const token = generateAccesToken({ userid: existingUser.id })
+        const refresh = generateRefreshToken({ userid: existingUser.id })
 
         res.status(200).json({ refresh, token, status: true });
     } catch (error) {
