@@ -16,10 +16,11 @@ const auth = async (req, res, next) => {
             return res.status(401).json({ error: 'Unauthorized: Malformed token' });
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+        
         const user = await prisma.user.findUnique({
             where: { id: decoded.userid }
         });
+
         if (!user.id) {
             return res.status(401).json({ error: 'Unauthorized: Invalid user' });
         }
