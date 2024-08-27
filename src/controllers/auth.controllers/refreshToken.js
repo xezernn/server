@@ -5,9 +5,6 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET
 function refreshToken(req, res) {
     const { refreshToken } = req.body;
 
-    console.log("gonderdiym: ",refreshToken);
-    
-
     if (!refreshToken) {
         return res.status(401).json({ message: 'Refresh token yoxdur axi!' });
     }
