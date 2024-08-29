@@ -9,6 +9,9 @@ const { categoryRouter, imgRouter, loginRouter, productRouter, sliderRouter } = 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const path = require('path');
+app.use('/api-docs/static', express.static(path.join(__dirname, 'node_modules/swagger-ui-dist')));
+
 const { specs, swaggerUi } = require('./swagger');
 app.use('/api-docs', cors(), swaggerUi.serve, swaggerUi.setup(specs));
 
