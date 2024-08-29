@@ -32,7 +32,12 @@ const getProductById = async (req, res) => {
 
         if (!product) return res.status(404).json({ message: 'Product not found' });
 
-        res.status(200).json(product);
+        const obj = {
+            ...product,
+            totalPrice: product.discount > 0 ? (product.price * product.discount) / 100 : product.price
+        }
+        
+        res.status(200).json(obj);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

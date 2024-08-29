@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { endirim } = require('../../utils/endirim');
 const prisma = new PrismaClient();
 
 const getDiscountedProducts = async (req, res) => {
@@ -6,15 +7,17 @@ const getDiscountedProducts = async (req, res) => {
         const discountedProducts = await prisma.product.findMany({
             where: {
                 discount: {
-                    gt: 0  
+                    gt: 0
                 }
             },
             orderBy: {
-                discount: 'desc'  
+                discount: 'desc'
             },
-            take: 20 
+            take: 20
         });
-        res.status(200).json(discountedProducts);
+        const array = discountedProducts?.map(endirim)
+        
+        res.status(200).json(array);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

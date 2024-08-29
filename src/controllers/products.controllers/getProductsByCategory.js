@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { endirim } = require('../../utils/endirim');
 const prisma = new PrismaClient();
 
 const getProductsByCategory = async (req, res) => {
@@ -11,7 +12,10 @@ const getProductsByCategory = async (req, res) => {
             where: { id: id }
         }).Product();
 
-        res.status(200).json(products);
+
+        const array = products?.map(endirim)
+
+        res.status(200).json(array);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const { z } = require('zod');
+const { endirim } = require('../../utils/endirim');
 const prisma = new PrismaClient();
 
 const querySchema = z.object({
@@ -29,7 +30,9 @@ const searchProduct = async (req, res) => {
       include: { category: true }
     });
 
-    res.status(200).json(products);
+    const array = products?.map(endirim)
+
+    res.status(200).json(array);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

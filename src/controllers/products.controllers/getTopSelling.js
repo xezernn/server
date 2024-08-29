@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { endirim } = require('../../utils/endirim');
 const prisma = new PrismaClient();
 
 const getTopSellingProducts = async (req, res) => {
@@ -9,7 +10,10 @@ const getTopSellingProducts = async (req, res) => {
             },
             take: 20
         });
-        res.status(200).json(topSellingProducts);
+
+        const array = topSellingProducts?.map(endirim)
+
+        res.status(200).json(array);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

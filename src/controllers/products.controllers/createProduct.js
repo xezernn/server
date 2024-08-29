@@ -31,6 +31,8 @@ const productSchema = z.object({
 });
 
 const createProduct = async (req, res) => {
+    console.log("sdsdfcsd");
+
     const { img, price, discount, categoryId, subcategoryId } = req.body;
 
     const parseResult = productSchema.safeParse({
@@ -43,11 +45,24 @@ const createProduct = async (req, res) => {
     });
 
     if (!parseResult.success) {
-        return res.status(400).json({ errors: parseResult.error.format().name._errors[0] });
+        return res.status(400).json({ errors: parseResult.error.format() });
     }
 
     try {
-        const { img, name, price, discount, categoryId, subcategoryId, description, metadata,isTopSelling } = parseResult.data;
+        const { img, name, price, discount, categoryId, subcategoryId, description, metadata, isTopSelling } = parseResult.data;
+
+        const category = await prisma.category.findUnique({
+            where: { id: parseInt(categoryId) }
+        });
+
+        const subcategory = await prisma.subcategory.findUnique({
+            where: { id: parseInt(subcategoryId) }
+        });
+
+        if (!category || !subcategory) {
+            return res.status(400).json({ error: 'Category veya Subcategory yoxdur' });
+        }
+
         const product = await prisma.product.create({
             data: {
                 isTopSelling,
