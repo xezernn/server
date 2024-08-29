@@ -20,9 +20,18 @@ const getCategoriesById = async (req, res) => {
             }
         });
 
-        const yeniObj = { ...categories[0], subcategory: categories[0].Subcategory }
-        delete yeniObj.Subcategory
-        
+        const yeniObj = {
+            id: categories[0].id,
+            categoryName: categories[0].categoryName,
+            subcategory: categories[0].Subcategory.map(item => {
+                return {
+                    id: item.id,
+                    categoryName: item.categoryName,
+                    slug : `${categories[0].categoryName.toLocaleLowerCase("tr-Tr").split(" ").join("-")}/${item.categoryName.toLocaleLowerCase("tr-Tr").split(" ").join("-")}`                
+                }
+            })
+        }
+
         res.status(200).json(yeniObj);
     } catch (error) {
         res.status(500).json({ error: error.message });
