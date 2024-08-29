@@ -5,8 +5,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url       = env("TELEFONCLUB_PRISMA_URL")
-  directUrl = env("TELEFONCLUB_URL_NON_POOLING")
+  url       = env("NEPTUN_PRISMA_URL")
+  directUrl = env("NEPTUN_URL_NON_POOLING")
 }
 
 model Product {

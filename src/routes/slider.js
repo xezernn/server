@@ -115,14 +115,21 @@
 
 /**
  * @swagger
- * /slider:
+ * /slider/{id}:
  *   delete:
  *     tags: 
  *       - Slayder
- *     summary: Bütün slayderləri silin
+ *     summary: Slayderi ID-ə görə silin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Silinəcək slayderin ID-si
  *     responses:
  *       200:
- *         description: Bütün slayderlər uğurla silindi
+ *         description: Slayder uğurla silindi
  *         content:
  *           application/json:
  *             schema:
@@ -131,6 +138,19 @@
  *                 message:
  *                   type: string
  *                   description: Müvəffəqiyyət mesajı
+ *                 deletedSlider:
+ *                   type: object
+ *                   description: Silinmiş slayderin məlumatları
+ *       404:
+ *         description: Slayder tapılmadı
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
  *       500:
  *         description: Daxili server xətası
  *         content:
@@ -143,6 +163,7 @@
  *                   description: Xətanın açıqlaması
  */
 
+
 const express = require('express');
 const router = express.Router();
 
@@ -153,6 +174,6 @@ const upload = require('../middlewares/upload.middleware');
 
 router.post('/', auth, upload.single('img'), createSlider);
 router.get('/', getSliders);
-router.delete('/', deleteSliderById);
+router.delete('/:id', deleteSliderById);
 
 module.exports = router;

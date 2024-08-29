@@ -10,12 +10,13 @@ const register = async (req, res) => {
 
     try {
         const { login, password } = req.body;
+        
         const existingUser = await prisma.user.findUnique({
             where: { login }
         });
 
         if (existingUser) {
-            return res.status(400).json({ error: 'Bu ad artiq movcutdur' });
+            return res.status(409).json({ error: 'Bu ad artiq movcutdur' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

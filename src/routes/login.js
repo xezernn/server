@@ -2,7 +2,7 @@
  * @swagger
  * tags:
  *   name: Autentifikasiya
- *   description: İstifadəçi qeydiyyatı, giriş, token doğrulama və token yeniləmə əməliyyatları
+ *   description: İstifadəçi qeydiyyatı, giriş, token doğrulama, token yeniləmə və admin əməliyyatları.
  */
 
 /**
@@ -218,10 +218,178 @@
  *                   description: Xətanın açıqlaması
  */
 
+/**
+ * @swagger
+ * /auth/admin/{id}:
+ *   delete:
+ *     tags: 
+ *       - Autentifikasiya
+ *     summary: Admin istifadəçisini silin
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Adminin ID-si
+ *     responses:
+ *       200:
+ *         description: İstifadəçi müvəffəqiyyətlə silindi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mesaj:
+ *                   type: string
+ *                   description: Əməliyyatın uğurlu olub-olmaması
+ *                 deleteUser:
+ *                   type: object
+ *                   description: Silinən istifadəçinin məlumatları
+ *       403:
+ *         description: Adminlərin silinməsinə yalnız super adminin icazəsi var
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ *       404:
+ *         description: Belə istifadəçi yoxdur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ *       500:
+ *         description: Daxili server xətası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ */
+
+/**
+ * @swagger
+ * /auth/admin/{id}:
+ *   put:
+ *     tags: 
+ *       - Autentifikasiya
+ *     summary: Admin parolunu dəyişin
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Adminin ID-si
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: Yeni parol
+ *     responses:
+ *       200:
+ *         description: Parol uğurla dəyişdirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Əməliyyatın uğurlu olub-olmaması
+ *       403:
+ *         description: Bu dəyişiklik yalnız super admin tərəfindən edilə bilər
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ *       404:
+ *         description: Belə istifadəçi yoxdur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ *       500:
+ *         description: Daxili server xətası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ */
+
+/**
+ * @swagger
+ * /auth/admins:
+ *   get:
+ *     tags: 
+ *       - Autentifikasiya
+ *     summary: Bütün adminləri alın
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Bütün adminlər siyahısı
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: Admin ID-si
+ *                   login:
+ *                     type: string
+ *                     description: Admin istifadəçi adı
+ *       500:
+ *         description: Daxili server xətası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ */
+
 const express = require('express');
 const router = express.Router();
 
-const { register, login, verifyToken, refreshToken } = require('../controllers/auth.controllers');
+const { register, login, verifyToken, refreshToken, admins, deleteAdmin, editAdmin } = require('../controllers/auth.controllers');
 const auth = require('../middlewares/auth.middleware');
 const validator = require('../middlewares/validation.middleware');
 
@@ -231,5 +399,8 @@ router.post('/register', auth, validator(authSchema), register);
 router.post('/login', validator(authSchema), login);
 router.post('/refresh-token', refreshToken);
 router.get('/verify-token', auth, verifyToken);
+router.delete('/admin/:id', auth, deleteAdmin);
+router.put('/admin/:id', auth, editAdmin);
+router.get('/admins', auth, admins);
 
 module.exports = router;
