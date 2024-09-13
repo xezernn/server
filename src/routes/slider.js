@@ -16,14 +16,13 @@
  *       - bearerAuth: []
  *     requestBody:
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
  *               img:
  *                 type: string
- *                 format: binary
- *                 description: Slayder üçün şəkil faylı (jpg, jpeg, png, gif formatlarında)
+ *                 description: Slayder üçün şəkil linki
  *               categoryId:
  *                 type: integer
  *                 description: Slayderin aid olduğu kateqoriya ID-si
@@ -101,6 +100,9 @@
  *                   subcategory:
  *                     type: object
  *                     description: Alt kateqoriya məlumatları
+ *                   slug:
+ *                     type: string
+ *                     description: kategorynin yonlendirme linki
  *       500:
  *         description: Daxili server xətası
  *         content:
