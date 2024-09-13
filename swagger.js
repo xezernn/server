@@ -13,6 +13,9 @@ const options = {
       {
         url: 'https://neptunbk.vercel.app',
       },
+      {
+        url: 'http://localhost:3215',
+      },
     ],
     components: {
       securitySchemes: {

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Slider" ALTER COLUMN "img" DROP NOT NULL;

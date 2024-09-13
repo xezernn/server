@@ -9,23 +9,7 @@ const getProducts = async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
 
-    const products = await prisma.product.findMany({
-      select: {
-        id: true,
-        img: true,
-        name: true,
-        category: true,
-        subcategory: true,
-        description: true,
-        discount: true,
-        price: true,
-        metadata: true,
-        createdAt: true,
-        updatedAt: true,
-        isTopSelling: true
-      },
-      skip: skip, take: limit,
-    });
+    const products = await prisma.product.findMany({skip, take: limit,});
 
     const array = products?.map(endirim)
 

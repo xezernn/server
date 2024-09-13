@@ -31,7 +31,6 @@ const productSchema = z.object({
 });
 
 const createProduct = async (req, res) => {
-    console.log("sdsdfcsd");
 
     const { img, price, discount, categoryId, subcategoryId } = req.body;
 
