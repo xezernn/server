@@ -11,11 +11,15 @@ const options = {
     },
     servers: [
       {
+        url: 'https://neptun.xezernn.com.az',
+      },
+      {
         url: 'https://neptunbk.vercel.app',
       },
       {
         url: 'http://localhost:3215',
       },
+      
     ],
     components: {
       securitySchemes: {
