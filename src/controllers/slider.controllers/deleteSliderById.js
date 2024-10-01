@@ -14,12 +14,7 @@ const deleteSliderById = async (req, res) => {
             return res.status(404).json({ error: 'Slider not found' });
         }
 
-        if (slider.img && slider.img.length > 0) {
-            for (const imageUrl of slider.img) {
-                const filename = imageUrl.split('/').pop();
-                await deleteImageByPathname(filename);
-            }
-        }
+        const deleteElem = await deleteImageByPathname(slider.img)
 
         const deletedSlider = await prisma.slider.delete({
             where: { id }

@@ -4,16 +4,30 @@ const prisma = new PrismaClient();
 
 const getProducts = async (req, res) => {
   try {
-
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
 
-    const products = await prisma.product.findMany({skip, take: limit,});
+    // Ümumi məhsul sayını əldə edin
+    const totalProducts = await prisma.product.count();
 
-    const array = products?.map(endirim)
+    // Maksimum səhifə sayını hesablamaq
+    const totalPages = Math.ceil(totalProducts / limit);
 
-    res.status(200).json(array);
+    const products = await prisma.product.findMany({
+      skip,
+      take: limit,
+    });
+
+    const array = products?.map(endirim);
+
+    // Nəticələrə totalProducts və totalPages əlavə edin
+    res.status(200).json({
+      products: array,
+      totalProducts,
+      totalPages,
+      currentPage: page,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

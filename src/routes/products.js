@@ -18,44 +18,56 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: Məhsulun unikal ID-si
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
  *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
  *                         type: number
  *                         description: Məhsulun qiyməti
- *                      discount:
+ *                       discount:
  *                         type: integer
  *                         description: Məhsulun endirim faizi
- *                      img:
+ *                       img:
  *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
+ *                         description: Məhsulun şəkilləri
  *                         items:
  *                           type: string
  *                           format: url
  *                           description: Şəklin URL-i
- *                      categoryId:
+ *                       categoryId:
  *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
  *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
  *                         type: string
  *                         description: Məhsulun təsviri
- *                      metadata:
+ *                       metadata:
  *                         type: string
  *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
  *       500:
  *         description: Daxili server xətası
  *         content:
@@ -87,8 +99,8 @@
  *                 type: string
  *                 description: Məhsulun adı
  *               isTopSelling:
- *                   type: boolean
- *                   description: Əməliyyatın tvgybhjn
+ *                 type: boolean
+ *                 description: Məhsul ən çox satılan məhsuldurmu
  *               price:
  *                 type: number
  *                 description: Məhsulun qiyməti
@@ -97,17 +109,17 @@
  *                 description: Məhsulun endirim faizi
  *               img:
  *                 type: array
- *                 description: Məhsulun şəkilləri (array şəklində)
+ *                 description: Məhsulun şəkilləri
  *                 items:
  *                   type: string
  *                   format: url
  *                   description: Şəklin URL-i
  *               categoryId:
  *                 type: integer
- *                 description: Məhsulun kateqoriyası ID-si
+ *                 description: Məhsulun kateqoriya ID-si
  *               subcategoryId:
  *                 type: integer
- *                 description: Məhsulun alt kateqoriyası ID-si
+ *                 description: Məhsulun alt kateqoriya ID-si
  *               description:
  *                 type: string
  *                 description: Məhsulun təsviri
@@ -127,7 +139,7 @@
  *                   description: Əməliyyatın statusu
  *                 product:
  *                   type: object
- *                   description: Yaradılan məhsul
+ *                   description: Yaradılan məhsulun məlumatları
  *       400:
  *         description: Yanlış daxil edilmiş məlumat
  *         content:
@@ -150,7 +162,6 @@
  *                   description: Xətanın açıqlaması
  */
 
-
 /**
  * @swagger
  * /products/discounted:
@@ -164,107 +175,53 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
- *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
- *                         type: number
- *                         description: Məhsulun qiyməti
- *                      discount:
- *                         type: integer
- *                         description: Məhsulun endirim faizi
- *                      img:
- *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
- *                         items:
- *                           type: string
- *                           format: url
- *                           description: Şəklin URL-i
- *                      categoryId:
- *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
- *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
- *                         type: string
- *                         description: Məhsulun təsviri
- *                      metadata:
- *                         type: string
- *                         description: Məhsulun əlavə məlumatları
- *       500:
- *         description: Daxili server xətası
- *         content:
- *           application/json:
- *             schema:
  *               type: object
  *               properties:
- *                 error:
- *                   type: string
- *                   description: Xətanın açıqlaması
- */
-
-/**
- * @swagger
- * /products/populyar:
- *   get:
- *     tags: 
- *       - Məhsullar
- *     summary: Ən çox satılan məhsulları əldə edin
- *     responses:
- *       200:
- *         description: Ən çox satılan məhsullar uğurla əldə olundu
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
  *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
  *                         type: number
  *                         description: Məhsulun qiyməti
- *                      discount:
+ *                       discount:
  *                         type: integer
  *                         description: Məhsulun endirim faizi
- *                      img:
+ *                       img:
  *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
+ *                         description: Məhsulun şəkilləri
  *                         items:
  *                           type: string
  *                           format: url
  *                           description: Şəklin URL-i
- *                      categoryId:
+ *                       categoryId:
  *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
  *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
  *                         type: string
  *                         description: Məhsulun təsviri
- *                      metadata:
+ *                       metadata:
  *                         type: string
  *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
  *       500:
  *         description: Daxili server xətası
  *         content:
@@ -297,44 +254,53 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
  *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
  *                         type: number
  *                         description: Məhsulun qiyməti
- *                      discount:
+ *                       discount:
  *                         type: integer
  *                         description: Məhsulun endirim faizi
- *                      img:
+ *                       img:
  *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
+ *                         description: Məhsulun şəkilləri
  *                         items:
  *                           type: string
  *                           format: url
  *                           description: Şəklin URL-i
- *                      categoryId:
+ *                       categoryId:
  *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
  *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
  *                         type: string
  *                         description: Məhsulun təsviri
- *                      metadata:
+ *                       metadata:
  *                         type: string
  *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
  *       400:
  *         description: Yanlış daxil edilmiş məlumat
  *         content:
@@ -345,6 +311,238 @@
  *                 errors:
  *                   type: string
  *                   description: Xətanın açıqlaması
+ *       500:
+ *         description: Daxili server xətası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ */
+
+/**
+ * @swagger
+ * /products/category/{id}:
+ *   get:
+ *     tags: 
+ *       - Məhsullar
+ *     summary: Kateqoriyasına görə məhsulları əldə edin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Kateqoriyanın ID-si
+ *     responses:
+ *       200:
+ *         description: Məhsullar uğurla əldə olundu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
+ *                         type: boolean
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
+ *                         type: number
+ *                         description: Məhsulun qiyməti
+ *                       discount:
+ *                         type: integer
+ *                         description: Məhsulun endirim faizi
+ *                       img:
+ *                         type: array
+ *                         description: Məhsulun şəkilləri
+ *                         items:
+ *                           type: string
+ *                           format: url
+ *                           description: Şəklin URL-i
+ *                       categoryId:
+ *                         type: integer
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
+ *                         type: integer
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
+ *                         type: string
+ *                         description: Məhsulun təsviri
+ *                       metadata:
+ *                         type: string
+ *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
+ *       500:
+ *         description: Daxili server xətası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ */
+
+/**
+ * @swagger
+ * /products/subcategory/{id}:
+ *   get:
+ *     tags: 
+ *       - Məhsullar
+ *     summary: Alt kateqoriyasına görə məhsulları əldə edin
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Alt kateqoriyanın ID-si
+ *     responses:
+ *       200:
+ *         description: Məhsullar uğurla əldə olundu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
+ *                         type: boolean
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
+ *                         type: number
+ *                         description: Məhsulun qiyməti
+ *                       discount:
+ *                         type: integer
+ *                         description: Məhsulun endirim faizi
+ *                       img:
+ *                         type: array
+ *                         description: Məhsulun şəkilləri
+ *                         items:
+ *                           type: string
+ *                           format: url
+ *                           description: Şəklin URL-i
+ *                       categoryId:
+ *                         type: integer
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
+ *                         type: integer
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
+ *                         type: string
+ *                         description: Məhsulun təsviri
+ *                       metadata:
+ *                         type: string
+ *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
+ *       500:
+ *         description: Daxili server xətası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Xətanın açıqlaması
+ */
+
+/**
+ * @swagger
+ * /products/populyar:
+ *   get:
+ *     tags: 
+ *       - Məhsullar
+ *     summary: Ən çox satılan məhsulları əldə edin
+ *     responses:
+ *       200:
+ *         description: Ən çox satılan məhsullar uğurla əldə olundu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   products:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         name:
+ *                           type: string
+ *                           description: Məhsulun adı
+ *                         isTopSelling:
+ *                           type: boolean
+ *                           description: Məhsul ən çox satılan məhsuldurmu
+ *                         price:
+ *                           type: number
+ *                           description: Məhsulun qiyməti
+ *                         discount:
+ *                           type: integer
+ *                           description: Məhsulun endirim faizi
+ *                         img:
+ *                           type: array
+ *                           description: Məhsulun şəkilləri
+ *                           items:
+ *                             type: string
+ *                             format: url
+ *                             description: Şəklin URL-i
+ *                         categoryId:
+ *                           type: integer
+ *                           description: Məhsulun kateqoriya ID-si
+ *                         subcategoryId:
+ *                           type: integer
+ *                           description: Məhsulun alt kateqoriya ID-si
+ *                         description:
+ *                           type: string
+ *                           description: Məhsulun təsviri
+ *                         metadata:
+ *                           type: string
+ *                           description: Məhsulun əlavə məlumatları
+ *                   totalProducts:
+ *                     type: integer
+ *                     description: Ümumi məhsul sayı
+ *                   totalPages:
+ *                     type: integer
+ *                     description: Səhifələrin ümumi sayı
+ *                   currentPage:
+ *                     type: integer
+ *                     description: Hazırki səhifə
  *       500:
  *         description: Daxili server xətası
  *         content:
@@ -379,40 +577,37 @@
  *             schema:
  *               type: object
  *               properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
- *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
- *                         type: number
- *                         description: Məhsulun qiyməti
- *                      discount:
- *                         type: integer
- *                         description: Məhsulun endirim faizi
- *                      img:
- *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
- *                         items:
- *                           type: string
- *                           format: url
- *                           description: Şəklin URL-i
- *                      categoryId:
- *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
- *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
- *                         type: string
- *                         description: Məhsulun təsviri
- *                      metadata:
- *                         type: string
- *                         description: Məhsulun əlavə məlumatları
+ *                   name:
+ *                     type: string
+ *                     description: Məhsulun adı
+ *                   isTopSelling:
+ *                     type: boolean
+ *                     description: Məhsul ən çox satılan məhsuldurmu
+ *                   price:
+ *                     type: number
+ *                     description: Məhsulun qiyməti
+ *                   discount:
+ *                     type: integer
+ *                     description: Məhsulun endirim faizi
+ *                   img:
+ *                     type: array
+ *                     description: Məhsulun şəkilləri
+ *                     items:
+ *                       type: string
+ *                       format: url
+ *                       description: Şəklin URL-i
+ *                   categoryId:
+ *                     type: integer
+ *                     description: Məhsulun kateqoriya ID-si
+ *                   subcategoryId:
+ *                     type: integer
+ *                     description: Məhsulun alt kateqoriya ID-si
+ *                   description:
+ *                     type: string
+ *                     description: Məhsulun təsviri
+ *                   metadata:
+ *                     type: string
+ *                     description: Məhsulun əlavə məlumatları
  *       404:
  *         description: Məhsul tapılmadı
  *         content:
@@ -457,37 +652,37 @@
  *           schema:
  *             type: object
  *             properties:
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
- *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
- *                         type: number
- *                         description: Məhsulun qiyməti
- *                      discount:
- *                         type: integer
- *                         description: Məhsulun endirim faizi
- *                      img:
- *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
- *                         items:
- *                           type: string
- *                           format: url
- *                           description: Şəklin URL-i
- *                      categoryId:
- *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
- *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
- *                         type: string
- *                         description: Məhsulun təsviri
- *                      metadata:
- *                         type: string
- *                         description: Məhsulun əlavə məlumatları
+ *                   name:
+ *                     type: string
+ *                     description: Məhsulun adı
+ *                   isTopSelling:
+ *                     type: boolean
+ *                     description: Məhsul ən çox satılan məhsuldurmu
+ *                   price:
+ *                     type: number
+ *                     description: Məhsulun qiyməti
+ *                   discount:
+ *                     type: integer
+ *                     description: Məhsulun endirim faizi
+ *                   img:
+ *                     type: array
+ *                     description: Məhsulun şəkilləri
+ *                     items:
+ *                       type: string
+ *                       format: url
+ *                       description: Şəklin URL-i
+ *                   categoryId:
+ *                     type: integer
+ *                     description: Məhsulun kateqoriya ID-si
+ *                   subcategoryId:
+ *                     type: integer
+ *                     description: Məhsulun alt kateqoriya ID-si
+ *                   description:
+ *                     type: string
+ *                     description: Məhsulun təsviri
+ *                   metadata:
+ *                     type: string
+ *                     description: Məhsulun əlavə məlumatları
  *     responses:
  *       200:
  *         description: Məhsul uğurla redaktə olundu
@@ -593,44 +788,53 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
  *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
  *                         type: number
  *                         description: Məhsulun qiyməti
- *                      discount:
+ *                       discount:
  *                         type: integer
  *                         description: Məhsulun endirim faizi
- *                      img:
+ *                       img:
  *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
+ *                         description: Məhsulun şəkilləri
  *                         items:
  *                           type: string
  *                           format: url
  *                           description: Şəklin URL-i
- *                      categoryId:
+ *                       categoryId:
  *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
  *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
  *                         type: string
  *                         description: Məhsulun təsviri
- *                      metadata:
+ *                       metadata:
  *                         type: string
  *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
  *       500:
  *         description: Daxili server xətası
  *         content:
@@ -663,44 +867,53 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                      id:
- *                        type: integer
- *                        description: Məhsulun unikal ID-si
- *                      name:
- *                        type: string
- *                        description: Məhsulun adı
- *                      isTopSelling:
+ *               type: object
+ *               properties:
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Məhsulun adı
+ *                       isTopSelling:
  *                         type: boolean
- *                         description: Əməliyyatın tvgybhjn
- *                      price:
+ *                         description: Məhsul ən çox satılan məhsuldurmu
+ *                       price:
  *                         type: number
  *                         description: Məhsulun qiyməti
- *                      discount:
+ *                       discount:
  *                         type: integer
  *                         description: Məhsulun endirim faizi
- *                      img:
+ *                       img:
  *                         type: array
- *                         description: Məhsulun şəkilləri (array şəklində)
+ *                         description: Məhsulun şəkilləri
  *                         items:
  *                           type: string
  *                           format: url
  *                           description: Şəklin URL-i
- *                      categoryId:
+ *                       categoryId:
  *                         type: integer
- *                         description: Məhsulun kateqoriyası ID-si
- *                      subcategoryId:
+ *                         description: Məhsulun kateqoriya ID-si
+ *                       subcategoryId:
  *                         type: integer
- *                         description: Məhsulun alt kateqoriyası ID-si
- *                      description:
+ *                         description: Məhsulun alt kateqoriya ID-si
+ *                       description:
  *                         type: string
  *                         description: Məhsulun təsviri
- *                      metadata:
+ *                       metadata:
  *                         type: string
  *                         description: Məhsulun əlavə məlumatları
+ *                 totalProducts:
+ *                   type: integer
+ *                   description: Ümumi məhsul sayı
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Səhifələrin ümumi sayı
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Hazırki səhifə
  *       500:
  *         description: Daxili server xətası
  *         content:
@@ -712,6 +925,7 @@
  *                   type: string
  *                   description: Xətanın açıqlaması
  */
+
 
 const express = require('express');
 const router = express.Router();
