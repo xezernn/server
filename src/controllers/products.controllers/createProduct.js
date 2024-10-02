@@ -27,12 +27,19 @@ const createProduct = async (req, res) => {
             categoryId, subcategoryId, sizes, isTopSelling, isStok, isCheaps
         } = parseResult.data;
 
+        console.log("-----------------------------------------------------------------");
+        console.log("cat: " ,categoryId);
+        console.log("subcat: " ,subcategoryId);
+        
+
         // Check if category and subcategory exist in the database
         const category = await prisma.category.findUnique({
-            where: { id: categoryId }
+            where: { id: categoryId}
         });
         const subcategory = await prisma.subcategory.findUnique({
-            where: { id: subcategoryId }
+            where: {
+                id: subcategoryId
+            }
         });
 
         if (!category || !subcategory) {

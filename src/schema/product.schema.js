@@ -18,11 +18,14 @@ const productSchema = z.object({
     categoryId: z.number()
         .int({ message: 'Category ID must be an integer' })
         .positive({ message: 'Category ID must be a positive integer' }),
+    subcategoryId: z.number()
+        .int({ message: 'Category ID must be an integer' })
+        .positive({ message: 'Category ID must be a positive integer' }),
     description: z.string()
         .min(3, { message: 'Product description must be at least 3 characters long' })
         .max(255, { message: 'Product description must be less than 255 characters' })
         .trim(),
-    metadata: z.object({}).optional()
+    metadata: z.string().optional()
 });
 
 
