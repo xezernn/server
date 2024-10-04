@@ -57,3 +57,4 @@ model User {
   login    String @unique @db.VarChar(255)
   password String @db.VarChar(255)
 }
+

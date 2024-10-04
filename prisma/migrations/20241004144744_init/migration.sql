@@ -19,11 +19,9 @@ CREATE TABLE "Product" (
 -- CreateTable
 CREATE TABLE "Slider" (
     "id" SERIAL NOT NULL,
-    "img" TEXT[],
+    "img" TEXT,
     "categoryId" INTEGER NOT NULL,
     "subcategoryId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Slider_pkey" PRIMARY KEY ("id")
 );
