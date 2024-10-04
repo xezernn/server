@@ -461,7 +461,7 @@ const validator = require('../middlewares/validation.middleware');
 const { categorySchema, subcategorySchema } = require('../schema/categories.schema');
 const router = express.Router();
 
-router.post('/', validator(categorySchema), auth, createCategory);
+router.post('/', validator(categorySchema), createCategory);
 router.get('/', getCategories);
 router.get('/:id', getCategoriesById);
 router.put('/:id', validator(categorySchema), auth, editCategoriesById);
