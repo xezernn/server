@@ -395,7 +395,7 @@ const validator = require('../middlewares/validation.middleware');
 
 const authSchema = require('../schema/auth.schema');
 
-router.post('/register', auth, validator(authSchema), register);
+router.post('/register', validator(authSchema), register);
 router.post('/login', validator(authSchema), login);
 router.post('/refresh-token', refreshToken);
 router.get('/verify-token', auth, verifyToken);

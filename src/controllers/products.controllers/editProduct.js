@@ -16,7 +16,7 @@ const editProduct = async (req, res) => {
 
     try {
         const parseResult = productSchema.safeParse({
-            imageUrl,
+            img,
             name,
             price: Number(price),
             discount: Number(discount),
@@ -25,8 +25,6 @@ const editProduct = async (req, res) => {
             description,
             metadata,
             isTopSelling,
-            isStok,
-            isCheaps
         });
 
         if (!parseResult.success) {

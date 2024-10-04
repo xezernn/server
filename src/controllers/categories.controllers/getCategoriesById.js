@@ -27,11 +27,10 @@ const getCategoriesById = async (req, res) => {
                 return {
                     id: item.id,
                     categoryName: item.categoryName,
-                    slug : `${categories[0].categoryName.toLocaleLowerCase("tr-Tr").split(" ").join("-")}/${item.categoryName.toLocaleLowerCase("tr-Tr").split(" ").join("-")}`                
+                    slug: `${categories[0].categoryName.toLocaleLowerCase("tr-Tr").split(" ").join("-")}/${item.categoryName.toLocaleLowerCase("tr-Tr").split(" ").join("-")}`.replaceAll(",", "")
                 }
             })
         }
-
         res.status(200).json(yeniObj);
     } catch (error) {
         res.status(500).json({ error: error.message });
