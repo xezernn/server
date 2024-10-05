@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 const editProduct = async (req, res) => {
     const id = Number(req.params.id);
     let {
-        imageUrl, name, price, discount, categoryId, subcategoryId,
-        description, metadata, isTopSelling, isStok, isCheaps
+        img, name, price, discount, categoryId, subcategoryId,
+        description, metadata, isTopSelling
     } = req.body;
 
     if (typeof isTopSelling === 'undefined') isTopSelling = false;
